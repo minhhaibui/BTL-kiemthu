@@ -77,30 +77,73 @@ class adminController {
             });
         })
             .catch(next);
-        // res.render("admin/form-add-product", {
-        //   title: "Add product",
-        //   layout: "admin",
-        // });
     }
     async storeProduct(req, res, next) {
-        // res.json(req.body);
-        const product = new products_entity_1.Products();
-        const categories = new categories_entity_1.Categories();
-        categories.id = req.body.category;
-        product.name = req.body.name;
-        product.size = req.body.size;
-        product.amout = req.body.amout;
-        product.color = req.body.color;
-        product.desciption = req.body.desciption;
-        product.price = req.body.price;
-        product.img = req.file?.filename || req.body.imgUpload;
-        product.categories = categories;
-        product
-            .save()
-            .then(() => {
-            res.redirect("/admin/products");
-        })
-            .catch(next);
+        const validateForm = (name, size, color, filename) => {
+            const nameRegex = /^[a-zA-Z0-9]{1,50}$/;
+            const sizeRegex = /^(3[4-9]|[4-9][0-9])$/;
+            const listColor = [
+                "đen",
+                "trắng",
+                "đỏ",
+                "xanh dương",
+                "xanh lục",
+                "cam",
+                "nâu",
+                "hồng",
+            ];
+            const error = [];
+            if (!nameRegex.test(name)) {
+                error.push("name khong hop le");
+            }
+            if (!sizeRegex.test(size)) {
+                error.push(" size khong hop le");
+            }
+            for (let i = 0; i < listColor.length; i++) {
+                if (color !== listColor[i]) {
+                    if (!error.includes("mau khong hop le")) {
+                        error.push("mau khong hop le");
+                    }
+                }
+            }
+            // Kiểm tra kích thước tập tin
+            const maxSize = 2 * 1024 * 1024; // 2MB
+            if (filename?.size > maxSize) {
+                error.push("img không hop le");
+            }
+            // Kiểm tra định dạng ảnh
+            const allowedFormats = ["png", "jpeg", "jpg"];
+            const fileExtension = filename?.split(".").pop().toLowerCase();
+            if (!allowedFormats.includes(fileExtension)) {
+                error.push("img không hop le");
+            }
+            return error;
+        };
+        const { category, name, size, amout, color, desciption, price, imgUpload } = req.body;
+        const fileName = req.file?.filename;
+        const typeError = validateForm(name, size, color, fileName);
+        if (typeError.length > 0) {
+            res.json(typeError);
+        }
+        else {
+            const product = new products_entity_1.Products();
+            const categories = new categories_entity_1.Categories();
+            categories.id = category;
+            product.name = name;
+            product.size = size;
+            product.amout = amout;
+            product.color = color;
+            product.desciption = desciption;
+            product.price = price;
+            product.img = fileName || imgUpload;
+            product.categories = categories;
+            product
+                .save()
+                .then(() => {
+                res.redirect("/admin/products");
+            })
+                .catch(next);
+        }
     }
     //updateProduct
     async editProduct(req, res, next) {
@@ -117,50 +160,86 @@ class adminController {
             .leftJoinAndSelect("products.categories", "categories")
             .where("products.id = :id", { id: req.query.id })
             .getOne();
-        // .then((products) => (data["product"] = products))
-        // .catch(next);
-        // res.render("admin/products/update", {
-        //   title: "Edit product",
-        //   layout: "admin",
-        //   product: product,
-        // });
         data = {
             categories: categories,
             product: product,
         };
-        // res.json(data);
         // res.json(data);
         res.render("admin/products/update", {
             title: "Edit product",
             layout: "admin",
             data: data,
         });
-        // res.render("admin/form-add-product", {
-        //   title: "Add product",
-        //   layout: "admin",
-        //
     }
     async updateProduct(req, res, next) {
+        const validateForm = (name, size, color, filename) => {
+            const nameRegex = /^[a-zA-Z0-9]{1,50}$/;
+            const sizeRegex = /^(3[4-9]|[4-9][0-9])$/;
+            const listColor = [
+                "đen",
+                "trắng",
+                "đỏ",
+                "xanh dương",
+                "xanh lục",
+                "cam",
+                "nâu",
+                "hồng",
+            ];
+            const error = [];
+            if (!nameRegex.test(name)) {
+                error.push("name khong hop le");
+            }
+            if (!sizeRegex.test(size)) {
+                error.push(" size khong hop le");
+            }
+            for (let i = 0; i < listColor.length; i++) {
+                if (color !== listColor[i]) {
+                    if (!error.includes("mau khong hop le")) {
+                        error.push("mau khong hop le");
+                    }
+                }
+            }
+            // Kiểm tra kích thước tập tin
+            const maxSize = 2 * 1024 * 1024; // 2MB
+            if (filename?.size > maxSize) {
+                error.push("img không hop le");
+            }
+            // Kiểm tra định dạng ảnh
+            const allowedFormats = ["png", "jpeg", "jpg"];
+            const fileExtension = filename?.split(".").pop().toLowerCase();
+            if (!allowedFormats.includes(fileExtension)) {
+                error.push("img không hop le");
+            }
+            return error;
+        };
+        const { category, name, size, amout, color, desciption, price, imgUpload } = req.body;
+        const fileName = req.file?.filename;
+        const typeError = validateForm(name, size, color, fileName);
         const categories = await categoryRepository
             .createQueryBuilder("categories")
             .where("categories.id = :id", { id: req.body.category })
             .getOne();
         if (categories) {
-            await productsRepository
-                .createQueryBuilder("products")
-                .update()
-                .set({
-                name: req.body.name,
-                size: req.body.size,
-                color: req.body.color,
-                amout: req.body.amout,
-                categories: categories,
-                desciption: req.body.desciption,
-                price: req.body.price,
-                img: req.file?.filename || req.body.imgUpload,
-            })
-                .where("products.id = :id", { id: req.query.id })
-                .execute();
+            if (typeError.length > 0) {
+                res.json(typeError);
+            }
+            else {
+                await productsRepository
+                    .createQueryBuilder("products")
+                    .update()
+                    .set({
+                    name: name,
+                    size: size,
+                    color: color,
+                    amout: amout,
+                    categories: categories,
+                    desciption: desciption,
+                    price: price,
+                    img: fileName || imgUpload,
+                })
+                    .where("products.id = :id", { id: req.query.id })
+                    .execute();
+            }
         }
         res.redirect("/admin/products");
     }

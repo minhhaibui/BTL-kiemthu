@@ -7,47 +7,34 @@
       <form action="/account/singup" method="post">
         <h1 class="login">ĐĂNG KÍ</h1>
         <div class="input-user">
-          <input
-            id="username-login"
-            type="text"
-            name="username"
-            placeholder="Enter username"
-          />
+          <input id="username-login" type="text" name="username" placeholder="Enter username" />
+        </div>
+        <div class="input-fullName">
+          <input id="username-login" type="text" name="fullname" placeholder="Enter fullName " />
+        </div>
+        <div class="input-birthDay">
+          <input id="username-login" type="date" name="birthday" placeholder="Enter birthDay" />
+        </div>
+        <div class="input-email">
+          <input id="username-login" type="text" name="email" placeholder="Enter email" />
         </div>
         <div class="input-pw">
-          <input
-            id="password-login"
-            type="password"
-            name="password"
-            placeholder="Enter password"
-          />
+          <input id="password-login" type="password" name="password" placeholder="Enter password" />
         </div>
-        {{! <div class="input-pw">
-          <input
-            id="password-login"
-            type="password"
-            name="confirmpassword"
-            placeholder="Confirm password"
-          />
-        </div> }}
-        <div class="input-user">
-          <input
-            id="username-login"
-            type="text"
-            name="email"
-            placeholder="Enter email"
-          />
-
+        <div class="input-confirmPw">
+          <input id="password-login" type="password" name="confirmpassword" placeholder="Enter comfirm password" />
         </div>
-        {{! <input type="hidden" name="roleId" value="4" /> }}
         <input id="btn-login" type="submit" name="" value="ĐĂNG KÍ" />
-        <div class="message">
-          <a href="#">Quên mật khẩu? </a>
-          <a href="/account/login">Đăng nhập </a>
-
-        </div>
-      </form>
-
     </div>
+
+    {{! <input type="hidden" name="roleId" value="4" /> }}
+
+    <div class="message">
+      <a href="#">Quên mật khẩu? </a>
+      <a href="/account/login">Đăng nhập </a>
+    </div>
+    </form>
+
   </div>
+</div>
 </div>

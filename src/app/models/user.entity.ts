@@ -14,6 +14,7 @@ import bcryptjs from "bcryptjs";
 import { Roles } from "./role.entity";
 import { type } from "os";
 import { Bills } from "./bills.entity";
+import { Date } from "mongoose";
 
 @Entity()
 export class User extends BaseEntity {
@@ -22,6 +23,17 @@ export class User extends BaseEntity {
 
   @Column()
   username: string;
+
+  @Column({
+    type: "varchar",
+    length: 255,
+    charset: "utf8mb4",
+    collation: "utf8mb4_unicode_ci",
+  })
+  fullname: string;
+
+  @Column()
+  birthday: string;
 
   @Column()
   password: string;

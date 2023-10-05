@@ -9,13 +9,9 @@ const user_entity_1 = require("../models/user.entity");
 const role_entity_1 = require("../models/role.entity");
 class userController {
     async login(req, res, next) {
-        // const results = await MysqlDataSource.getRepository(Roles).find();
-        // return res.json(results);
         res.render("account/login");
     }
     async singup(req, res, next) {
-        // const results = await MysqlDataSource.getRepository(Roles).find();
-        // return res.json(results);
         res.render("account/singup");
     }
     async store(req, res, next) {

@@ -84,10 +84,13 @@ class siteController {
   }
   async collections(req: Request, res: Response, next: NextFunction) {
     const products = await productsRepository.find();
+    // const test = await productsRepository.find();
+
     res.render("collections", {
       title: "Tất cả sản phẩm",
       layout: "main",
       products: products,
+      // test: test,
     });
   }
   async selectCollections(req: Request, res: Response, next: NextFunction) {

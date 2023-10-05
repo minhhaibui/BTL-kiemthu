@@ -20,6 +20,8 @@ const bills_entity_1 = require("./bills.entity");
 let User = class User extends typeorm_1.BaseEntity {
     id;
     username;
+    fullname;
+    birthday;
     password;
     email;
     async hashPassword() {
@@ -36,6 +38,19 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "username", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: "varchar",
+        length: 255,
+        charset: "utf8mb4",
+        collation: "utf8mb4_unicode_ci",
+    }),
+    __metadata("design:type", String)
+], User.prototype, "fullname", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], User.prototype, "birthday", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
